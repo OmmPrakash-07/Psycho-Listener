@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon"type="image/png" href="Pics\Logo2.png">
+    <title>Contact Us</title>
+    <style>
+        * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    
+}
+body {
+    min-height: 100vh;
+    background-image: url(Background.jpg);
+    background-size: cover;
+    color: white;
+    font-family: Arial, sans-serif;
+}
+header{
+    position: sticky;
+    top: 0;
+    z-index: 5;
+}
+.header{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 28px;
+    background-image: url(HeaderBar1.jpg);
+    background-size: cover;
+    border-bottom: 1px solid rgb(212, 175, 55);
+    box-shadow: 0 2px 15px rgba(255, 0, 0, 1);
+    transition: all 0.3s ease-in-out;
+    height: 130px;
+}
+.logo img{
+    position: absolute;
+    border-radius: 50%;
+    margin-top: -30px;
+    border: 3px solid rgb(212, 175, 55);
+}
+#nav-bar{
+    display: flex;
+    align-items: center;
+    gap: 50px;
+    margin-right: 350px;
+}
+#nav-bar li,a{
+    list-style: none;
+    text-decoration: none;
+    color: white;
+    font-size: 20px;
+}
+header a:hover{
+    text-decoration: underline;
+}
+.intro-container{
+    padding: 20px 150px 10px 150px;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+.intro-container h1{
+    font-size: 50px;
+    margin: 50px;
+}
+.intro-container p{
+    font-size: 20px;
+    line-height: 30px;
+}
+.intro-card{
+    display: flex;
+    justify-content: space-around ;
+    line-height: 30px;
+}
+.intro-card-1{
+    text-align: center;
+}
+.intro-card-1 div{
+    display: flex;
+}
+.intro-card li{
+    display: inline;
+    padding-right: 20px;
+    font-size:15px ;
+}
+footer{
+    padding: 20px;
+    margin-top: 50px;
+    background-color: black;
+    text-align: center;
+}
+    </style>
+</head>
+<body>
+    <header>
+        <div class="header">
+            <div class="logo">
+                <a href=""><img src="Pics\Main_logo.jpg" alt="Pyscho Listener" width="180px"></a>
+            </div>
+            <nav>
+                <div>
+                    <ul id="nav-bar">
+                        <li><a href="HomePage.htm">Home</a></li>
+                        <li><a href="SongPage.htm">Songs</a></li>
+                        <li><a href="videos.html">Video</a></li>
+                        <li><a href="about_us.html">About Us</a></li>
+                        <li><a href="Contact_us.html">Contact</a></li>
+                    </ul>
+                </div>
+            </nav>
+        </div>
+    </header>
+    <main>
+        <div class="intro-container">
+            <h1>Contact Us</h1>
+        </div>
+        <div class="intro-card">
+            <div class="intro-card-1">
+                <img src="Pics\Logo1.png" alt="narayan" width="180px">
+                <h1>Zubaid Pasha</h1>
+                <div>
+                    <ul>
+                        <li><a href="">6371-537-012</a></li>
+                        <li><a href="email">zubaidpasha69@gmail.com</a></li>
+                    </ul>
+                </div>
+                
+           
+            </div>
+        </div>
+    </main>
+    <footer>
+        <div>
+            <p>Psycho Listener © 2025. All Rights Reserved.</p>
+        </div>
+    </footer>
+</body>
+</html>

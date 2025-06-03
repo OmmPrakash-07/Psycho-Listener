@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon"type="image/png" href="Pics\Logo2.png">
+    <title>Music Stream - Now Playing</title>
+    <style>
+        :root {
+            --primary: #4F2D82;
+            --background: #FFFFFF;
+            --text: #ffffff;
+            --muted: #bbbbbb;
+            --accent: #E6E0F0;
+            --border: #E2E2E2;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            color: var(--text);
+            background-image: url(Background.jpg);
+            background-size: contain;
+            padding-bottom: 100px;
+        }
+
+        /* Main song section */
+        .main-song-container {
+            display: flex;
+            padding: 40px;
+            gap: 40px;
+            max-width: 1400px;
+            margin: 0 auto;
+            min-height: 400px;
+            margin-top: 30px;
+        }
+
+        .song-image {
+            flex: 1;
+            max-width: 400px;
+        }
+
+        .song-image img {
+            width: 100%;
+            height: 400px;
+            object-fit: cover;
+            border-radius: 12px;
+            box-shadow: 0 2px 12px rgba(255, 0, 0, 0.5);
+        }
+
+        .lyrics-container {
+            flex: 1;
+            padding: 30px;
+            background-color: #1A1A1A;
+            border-radius: 12px;
+            white-space: pre-line;
+            overflow-y: auto;
+            max-height: 400px;
+            color: white;
+            text-align: center;
+            line-height: 30px;
+            box-shadow: 0 2px 12px rgba(255, 0, 0, 0.5);
+        }
+
+        /* Song list section */
+        .songs-list-container {
+            width: 80%;
+            margin: 40px auto;
+        }
+
+        .song-item {
+            display: flex;
+            align-items: center;
+            padding: 20px;
+            background-image: url(HeaderBar1.jpg);
+            background-size: cover;
+            border-radius: 8px;
+            margin-bottom: 10px;
+            cursor: pointer;
+            transition: transform 0.2s, background-color 0.2s;
+            box-shadow: 0 2px 12px rgba(255, 0, 0, 0.5);
+        }
+
+        .song-item:hover {
+            transform: translateX(10px);
+            box-shadow: 0 2px 12px rgba(255, 0, 0, 0.5);
+        }
+
+        .song-item img {
+            width: 60px;
+            height: 60px;
+            border-radius: 6px;
+            object-fit: cover;
+        }
+
+        .song-info {
+            margin-left: 20px;
+        }
+
+        .song-title {
+            font-weight: bold;
+            margin-bottom: 4px;
+        }
+
+        .song-artist {
+            color: var(--muted);
+            font-size: 0.9em;
+        }
+
+        /* Player bar */
+        .player-bar {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 100px;
+            background-image: url(PlayerBar.jpg);
+            background-size: cover;
+            box-shadow: 0 -2px 10px rgba(0,0,0,0.1);
+            display: flex;
+            align-items: center;
+            padding: 0 20px;
+            z-index: 1000;
+        }
+
+        .now-playing {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            width: 300px;
+        }
+
+        .now-playing img {
+            width: 60px;
+            height: 60px;
+            border-radius: 6px;
+            object-fit: cover;
+        }
+
+        .now-playing-info {
+            flex: 1;
+        }
+
+        .now-playing-title {
+            font-weight: bold;
+            margin-bottom: 4px;
+        }
+
+        .now-playing-artist {
+            color: var(--muted);
+            font-size: 0.9em;
+        }
+
+        .player-controls {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 20px;
+        }
+
+        .progress-container {
+            flex: 1;
+            height: 4px;
+            background: var(--accent);
+            border-radius: 2px;
+            cursor: pointer;
+            max-width: 500px;
+        }
+
+        .progress-bar {
+            height: 100%;
+            background: var(--primary);
+            border-radius: 2px;
+            width: 0;
+        }
+
+        .control-button {
+            background: none;
+            border: none;
+            cursor: pointer;
+            color: var(--text);
+            font-size: 24px;
+            padding: 10px;
+        }
+
+        .volume-control {
+            width: 200px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .volume-slider {
+            width: 100px;
+        }
+
+        /* Back button */
+        .back-button {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            padding: 10px 20px;
+            background-image: url(PlayerBar.jpg);
+            background-size: cover;
+            box-shadow: 0 2px 12px rgba(255, 0, 0, 0.5);
+            color: white;
+            border: 2px solid rgb(212, 175, 55);
+            border-radius: 5px;
+            cursor: pointer;
+            text-decoration: none;
+        }
+    </style>
+</head>
+<body>
+    <a href="SongPage.htm" class="back-button">← Back to Songs</a>
+
+    <!-- Main song display -->
+    <div class="main-song-container">
+        <div class="song-image">
+            <img src="" alt="Song Cover" id="mainSongImage">
+        </div>
+        <div class="lyrics-container" id="lyrics">
+            Loading lyrics...
+        </div>
+    </div>
+
+    <!-- Song list -->
+    <div class="songs-list-container" id="songsList">
+        <!-- Songs will be loaded here -->
+    </div>
+
+    <!-- Player bar -->
+    <div class="player-bar">
+        <div class="now-playing">
+            <img src="" alt="" id="playerSongImage">
+            <div class="now-playing-info">
+                <div class="now-playing-title" id="playerSongTitle"></div>
+                <div class="now-playing-artist" id="playerSongArtist"></div>
+            </div>
+        </div>
+        <div class="player-controls">
+            <button class="control-button" id="prevButton">⏮</button>
+            <button class="control-button" id="playButton">▶</button>
+            <button class="control-button" id="nextButton">⏭</button>
+            <div class="progress-container">
+                <div class="progress-bar" id="progressBar"></div>
+            </div>
+        </div>
+        <div class="volume-control">
+            <span>🔊</span>
+            <input type="range" class="volume-slider" min="0" max="100" value="100" id="volumeSlider">
+        </div>
+    </div>
+
+    <script>
+        let currentSongIndex = 0;
+        let isPlaying = false;
+        const audio = new Audio();
+        const songs = JSON.parse(localStorage.getItem('songs'));
+
+        // Initialize page
+        document.addEventListener('DOMContentLoaded', () => {
+            // Get song ID from URL parameters
+            const urlParams = new URLSearchParams(window.location.search);
+            const songId = parseInt(urlParams.get('songId')) || 1;
+
+            // Find song index from ID
+            currentSongIndex = songs.findIndex(song => song.id === songId);
+            if (currentSongIndex === -1) currentSongIndex = 0;
+
+            loadSong(currentSongIndex);
+            renderSongsList();
+            setupEventListeners();
+
+            // Auto-play the song
+            playSong();
+        });
+
+        function loadSong(index) {
+            const song = songs[index];
+            currentSongIndex = index;
+
+            // Update main display
+            document.getElementById('mainSongImage').src = song.albumCover;
+            document.getElementById('lyrics').textContent = song.lyrics;
+
+            // Update player
+            document.getElementById('playerSongImage').src = song.albumCover;
+            document.getElementById('playerSongTitle').textContent = song.title;
+            document.getElementById('playerSongArtist').textContent = song.singer;
+
+            // Set up audio
+            audio.src = song.audioUrl;
+            audio.load();
+        }
+
+        function renderSongsList() {
+            const container = document.getElementById('songsList');
+            container.innerHTML = '';
+
+            songs.forEach((song, index) => {
+                const element = document.createElement('div');
+                element.className = 'song-item';
+                element.innerHTML = `
+                    <img src="${song.albumCover}" alt="${song.title}">
+                    <div class="song-info">
+                        <div class="song-title">${song.title}</div>
+                        <div class="song-artist">${song.singer}</div>
+                    </div>
+                `;
+                element.addEventListener('click', () => {
+                    loadSong(index);
+                    playSong();
+                });
+                container.appendChild(element);
+            });
+        }
+
+        function setupEventListeners() {
+            const playButton = document.getElementById('playButton');
+            const prevButton = document.getElementById('prevButton');
+            const nextButton = document.getElementById('nextButton');
+            const volumeSlider = document.getElementById('volumeSlider');
+            const progressContainer = document.querySelector('.progress-container');
+
+            playButton.addEventListener('click', togglePlay);
+            prevButton.addEventListener('click', playPrevious);
+            nextButton.addEventListener('click', playNext);
+            volumeSlider.addEventListener('input', (e) => {
+                audio.volume = e.target.value / 100;
+            });
+
+            progressContainer.addEventListener('click', (e) => {
+                const width = progressContainer.clientWidth;
+                const clickX = e.offsetX;
+                const duration = audio.duration;
+                audio.currentTime = (clickX / width) * duration;
+            });
+
+            audio.addEventListener('timeupdate', updateProgress);
+            audio.addEventListener('ended', playNext);
+        }
+
+        function togglePlay() {
+            if (isPlaying) {
+                audio.pause();
+                document.getElementById('playButton').textContent = '▶';
+            } else {
+                audio.play();
+                document.getElementById('playButton').textContent = '⏸';
+            }
+            isPlaying = !isPlaying;
+        }
+
+        function playSong() {
+            audio.play();
+            isPlaying = true;
+            document.getElementById('playButton').textContent = '⏸';
+        }
+
+        function playPrevious() {
+            currentSongIndex = (currentSongIndex - 1 + songs.length) % songs.length;
+            loadSong(currentSongIndex);
+            if (isPlaying) playSong();
+        }
+
+        function playNext() {
+            currentSongIndex = (currentSongIndex + 1) % songs.length;
+            loadSong(currentSongIndex);
+            if (isPlaying) playSong();
+        }
+
+        function updateProgress() {
+            const progress = (audio.currentTime / audio.duration) * 100;
+            document.getElementById('progressBar').style.width = `${progress}%`;
+        }
+    </script>
+</body>
+</html>

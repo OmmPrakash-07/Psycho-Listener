@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon"type="image/png" href="Pics\Logo2.png">
+    <title>Signup</title>
+    <link rel="stylesheet" href="signup.css">
+</head>
+<body>
+    <div id="main_div">
+        <div id="logo_image">
+            <img src="Pics\Main_logo.jpg" alt="">
+            <h2 class="signup">Signup</h2>
+        </div>
+        
+            <form action="login.html">
+                <div class="email_pass"><label for="fullname"><p>Full Name</p> </label>
+                    <input class="input_text" type="text" id="fullname" placeholder="Enter your full name">
+                </div>
+                <div class="email_pass"><label for="username"><p>Username</p> </label>
+                    <input class="input_text" type="text" id="username" placeholder="Enter your full name">
+                </div>
+                <div id="gender_dob">
+                    <div>
+                        <label for="gender"><p>Gender</p></label>
+                        <select class="input_text" name="gender" id="gender" >
+                            <option value="1">Male</option>
+                            <option value="2">Female</option>
+                            <option value="3">Others</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label for="dob"><p>Date of Birth</p></label>
+                        <input class="input_text" type="date" id="dob">
+                    </div>
+                </div>
+                <div class="email_pass"><label for="Useremail"><p>Email</p> </label>
+                    <input class="input_text" type="text" id="Useremail" placeholder="Enter your email">
+                </div>
+                <div class="email_pass">
+                    <label for="pass"><p>Password</p></label>
+                    <input class="input_text" type="password" id="pass" placeholder="Enter your password">
+                </div>
+                <div class="email_pass">
+                    <label for="pass"><p>Confirm Password</p></label>
+                    <input class="input_text" type="password" id="pass" placeholder="Enter your password">
+                </div>
+                <div><button>Signup</button></div>
+            </form>
+    </div>
+</body>
+</html>

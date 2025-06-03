@@ -1,0 +1,534 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon"type="image/png" href="Pics\Logo2.png">
+    <title>Video Stream - Video Selection</title>
+    <style>
+        :root {
+            --primary: #4F2D82;
+            --background: #FFFFFF;
+            --text: #ffffff;
+            --muted: #cdcdcd;
+            --accent: #E6E0F0;
+            --border: #E2E2E2;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+        min-height: 100vh;
+        background-image: url(Background.jpg);
+        background-size: contain;
+        color: white;
+        font-family: Arial, sans-serif;
+    }
+    header{
+    position: sticky;
+    top: 0;
+    z-index: 5;
+    }
+    .header{
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 28px;
+        background-image: url(HeaderBar1.jpg);
+        background-size: cover;
+        border-bottom: 1px solid rgb(212, 175, 55);
+        box-shadow: 0 2px 15px rgba(255, 0, 0, 1);
+        transition: all 0.3s ease-in-out;
+    }
+    .logo img{
+        position: absolute;
+        border-radius: 50%;
+        margin-top: -30px;
+        border: 3px solid rgb(212, 175, 55);
+    }
+    #nav-bar{
+        display: flex;
+        align-items: center;
+        gap: 50px;
+        margin-left: 170px;
+    }
+    #nav-bar li,a{
+        list-style: none;
+        text-decoration: none;
+        color: white;
+        font-size: 20px;
+    }
+    .login{
+        display: flex;
+        align-items: center;
+        gap: 15px;
+    }
+    header a:hover{
+        text-decoration: underline;
+    }
+    #h1{
+        font-size: 40px;
+        padding: 20px;
+        margin: 20px 150px;
+        margin-top: 50px;
+        text-decoration: underline;
+    }
+    .slider-container {
+    width: 100%;
+    max-width: 1100px;
+    height: 600px;
+    overflow: hidden;
+    position: relative;
+    border-radius: 8px;
+    box-shadow: 0 2px 25px rgba(255, 0, 0, 3);
+    margin: 50px auto;
+}
+
+.slider {
+    display: flex;
+    width: 500%;  /* 100% * number of slides */
+    height: 100%;
+    transition: transform 1s ease;
+}
+
+.slide {
+    width: 20%;  /* 100% / number of slides */
+    height: 100%;
+    cursor: pointer;
+    position: relative;
+}
+
+.slide::after {
+    content: '▶';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 48px;
+    color: white;
+    text-shadow: 0 2px 4px rgba(0,0,0,0.5);
+    opacity: 0;
+    transition: opacity 0.3s;
+}
+
+.slide:hover::after {
+    opacity: 1;
+}
+
+.slide img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+/* Navigation dots */
+.dots {
+    position: absolute;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 10px;
+}
+
+.dot {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.5);
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.dot.active {
+    background: white;
+}
+
+/* Video Overlay */
+.video-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.8);
+    z-index: 100;
+    display: none;
+    justify-content: center;
+    align-items: center;
+}
+
+.video-container {
+    width: 80%;
+    max-width: 1000px;
+    position: relative;
+}
+
+.video-wrapper {
+    width: 100%;
+    padding-top: 56.25%; /* 16:9 Aspect Ratio */
+    position: relative;
+}
+
+.video-wrapper video {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border-radius: 8px;
+}
+
+.close-button {
+    position: absolute;
+    top: -40px;
+    right: 0;
+    background: none;
+    border: none;
+    color: white;
+    font-size: 24px;
+    cursor: pointer;
+    padding: 8px;
+}
+
+.close-button:hover {
+    opacity: 0.8;
+}
+        .videos-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 30px;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 50px;
+        }
+
+        .video-container {
+            cursor: pointer;
+            transition: transform 0.3s ease;
+            background-image: url(SongBackground.jpg);
+            background-size: contain;
+            border-radius: 3%;
+        }
+
+        .video-container:hover {
+            transform: translateY(-5px);
+        }
+
+        .thumbnail-container {
+            position: relative;
+            width: 100%;
+            padding-top: 56.25%; /* 16:9 Aspect Ratio */
+            background: var(--accent);
+            border-radius: 12px;
+            overflow: hidden;
+            margin-bottom: 12px;
+        }
+
+        .thumbnail-container img {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .video-info {
+            padding: 8px;
+        }
+
+        .video-title {
+            font-weight: bold;
+            font-size: 1.1em;
+            margin-bottom: 4px;
+            color: var(--text);
+        }
+
+        .video-artist {
+            color: var(--muted);
+            font-size: 0.9em;
+        }
+
+        .play-overlay {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .video-container:hover .play-overlay {
+            opacity: 1;
+        }
+
+        .play-icon {
+        filter: drop-shadow(0 2px 15px rgba(255, 0, 0, 1));
+        border-radius: 50%;
+        width: 70px;
+        height: 70px;
+}
+    </style>
+</head>
+<body>
+    <header>
+        <div class="header">
+            <div class="logo">
+                <a href=""><img src="Pics\Main_logo.jpg" alt="Pyscho Listener" width="180px"></a>
+            </div>
+            <nav>
+                <div>
+                    <ul id="nav-bar">
+                        <li><a href="HomePage.htm">Home</a></li>
+                        <li><a href="SongPage.htm">Songs</a></li>
+                        <li><a href="videos.html">Video</a></li>
+                        <li><a href="about_us.html">About Us</a></li>
+                        <li><a href="Contact_us.html">Contact</a></li>
+                    </ul>
+                </div>
+            </nav>
+            <div class="login">
+                <img src="Pics\Logo3.png" alt="" width="70px">
+                <a href="login.html">Login</a>
+            </div>
+        </div>
+    </header>
+    <h1 id="h1">Trending Videos</h1>
+    <div class="slider-container">
+        <div class="slider">
+            <div class="slide" data-video="Videos\y2mate.com - Tainu Khabar Nahi  Arijit Singh  Munjya  Sharvari Abhay Verma SachinJigarAmitabh Bhattacharya_1080.mp4">
+                <img src="Pics\1.jpg" alt="Tainu Khabar Nahi">
+            </div>
+            <div class="slide" data-video="Videos\y2mate.com - Tum Se Full Video Shahid Kapoor Kriti  SachinJigar Raghav Chaitanya Varun Jain Indraneel_1080.mp4">
+                <img src="Pics\2.jpg" alt="Tum Se">
+            </div>
+            <div class="slide" data-video="Videos\y2mate.com - Khoobsurat  Stree 2  Varun Dhawan  Shraddha Kapoor  Rajkummar Rao  SachinJigar  Vishal Mishra_1080.mp4">
+                <img src="Pics\3.jpg" alt="Khoobsurat">
+            </div>
+            <div class="slide" data-video="Videos\y2mate.com - Deewani  Sachet Tandon Parampara Tandon  Kumaar  Adil Shaikh  Bhushan Kumar_1080.mp4">
+                <img src="Pics\4.jpg" alt="Deewani">
+            </div>
+            <div class="slide" data-video="Videos\y2mate.com - Sanam Teri Kasam Lyrical Video  Harshvardhan Mawra  Ankit Tiwari  Palak M  Himesh Reshammiya_1080.mp4">
+                <img src="Pics\5.jpg" alt="Sanam Teri Kasam">
+            </div>
+        </div>
+        <div class="dots">
+            <span class="dot active"></span>
+            <span class="dot"></span>
+            <span class="dot"></span>
+            <span class="dot"></span>
+            <span class="dot"></span>
+        </div>
+    </div>
+
+    <!-- Video Overlay -->
+    <div class="video-overlay">
+        <div class="video-container">
+            <button class="close-button">✕</button>
+            <div class="video-wrapper">
+                <video controls>
+                    <source src="" type="video/mp4">
+                    Your browser does not support the video tag.
+                </video>
+            </div>
+        </div>
+    </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const slider = document.querySelector('.slider');
+            const dots = document.querySelectorAll('.dot');
+            const videoOverlay = document.querySelector('.video-overlay');
+            const video = videoOverlay.querySelector('video');
+            const closeButton = videoOverlay.querySelector('.close-button');
+            let currentSlide = 0;
+            const totalSlides = 5;
+
+            function updateSlider() {
+                slider.style.transform = `translateX(-${currentSlide * 20}%)`; // 20% per slide
+                dots.forEach((dot, index) => {
+                    dot.classList.toggle('active', index === currentSlide);
+                });
+            }
+
+            function nextSlide() {
+                currentSlide = (currentSlide + 1) % totalSlides;
+                updateSlider();
+            }
+
+            // Add click events to dots
+            dots.forEach((dot, index) => {
+                dot.addEventListener('click', () => {
+                    currentSlide = index;
+                    updateSlider();
+                });
+            });
+
+            // Add click events to slides for video playback
+            document.querySelectorAll('.slide').forEach(slide => {
+                slide.addEventListener('click', () => {
+                    const videoUrl = slide.dataset.video;
+                    video.src = videoUrl;
+                    videoOverlay.style.display = 'flex';
+                    video.play();
+                });
+            });
+
+            // Close video overlay
+            closeButton.addEventListener('click', () => {
+                video.pause();
+                video.currentTime = 0;
+                videoOverlay.style.display = 'none';
+            });
+
+            // Auto advance every 5 seconds when video is not playing
+            setInterval(() => {
+                if (videoOverlay.style.display !== 'flex') {
+                    nextSlide();
+                }
+            }, 5000);
+        });
+    </script>
+    <div class="videos-grid" id="videos-grid">
+        <!-- Videos will be dynamically populated here -->
+    </div>
+
+    <script>
+        // Video data
+        const videos = [
+            {
+                id: 1,
+                title: "Teri Aankhon Mein",
+                artist: "Darshan Rava Neha Kakkar",
+                thumbnail: "Pics/13.jpg",
+                videoUrl: "Videos/y2mate.com - Teri Aankhon Mein Song Divya K  Darshan R Neha K  Pearl V Manan B  Radhika Vinay  Bhushan K_1080.mp4"
+            },
+            {
+                id: 2,
+                title: "Mann Jogiya",
+                artist: "ArijitSingh, IshitaVishwakarma",
+                thumbnail: "Pics/12.jpg",
+                videoUrl: "Videos/y2mate.com - Mann Jogiya  Official Video ArijitSingh IshitaVishwakarma Anique Dheeraj  Pyaar Hai Toh Hai_1080.mp4"
+            },
+            {
+                id: 3,
+                title: "Shiddat",
+                artist: "Sunny Kaushal, Radhika Madan",
+                thumbnail: "Pics/11.jpg",
+                videoUrl: "Videos/y2mate.com - Shiddat Title Track Full Video Sunny KaushalRadhika Madan Mohit Raina Diana P  Manan Bhardwaj_1080p.mp4"
+            },
+            {
+                id: 4,
+                title: "Aaj Ki Raat",
+                artist: "Sachin-Jigar, Madhubanti Bhagchi",
+                thumbnail: "Pics/10.jpg",
+                videoUrl: "Videos/y2mate.com - Aaj Ki Raat  Stree 2  Tamannaah Bhatia  SachinJigar  Madhubanti  Divya  Amitabh_1080.mp4"
+            },
+            {
+                id: 5,
+                title: "Aaj Sajeya",
+                artist: "Goldie Sohel",
+                thumbnail: "Pics/9.jpg",
+                videoUrl: "Videos/y2mate.com - Aaj Sajeya  Alaya F  Goldie Sohel  Punit Malhotra  Official Video SneakerSong  Dharma 20_1080.mp4"
+            },
+            {
+                id: 6,
+                title: "Nain Matakka",
+                artist: "Diljit Dosanjh",
+                thumbnail: "Pics/8.jpg",
+                videoUrl: "Videos/y2mate.com - Nain Matakka  Baby John  Varun Dhawan Keerthy Suresh Diljit Dosanjh  Dhee Thaman S Irshad K_1080.mp4"
+            },
+            {
+                id: 7,
+                title: "Raanjhan",
+                artist: "Parampara Tandon, SachetParampara",
+                thumbnail: "Pics/7.jpg",
+                videoUrl: "Videos/y2mate.com - Full Video Raanjhan  Do Patti  Kriti Sanon Shaheer Sheikh  Parampara Tandon  SachetParampara_1080.mp4"
+            },
+            {
+                id: 8,
+                title: "Sajni",
+                artist: "Arijit Singh",
+                thumbnail: "Pics/6.jpg",
+                videoUrl: "Videos/y2mate.com - Sajni Song Arijit Singh Ram Sampath  Laapataa Ladies   Aamir Khan Productions_1080.mp4"
+            },
+            {
+                id: 9,
+                title: "Tainu Khabar Nahi",
+                artist: "Arijit Singh, Sachin-Jigar",
+                thumbnail: "Pics/1.jpg",
+                videoUrl: "Videos/y2mate.com - Tainu Khabar Nahi  Arijit Singh  Munjya  Sharvari Abhay Verma SachinJigarAmitabh Bhattacharya_1080.mp4"
+            },
+            {
+                id: 10,
+                title: "Tum Se",
+                artist: "Raghav Chaitanya, Varun Jain",
+                thumbnail: "Pics/2.jpg",
+                videoUrl: "Videos/y2mate.com - Tum Se Full Video Shahid Kapoor Kriti  SachinJigar Raghav Chaitanya Varun Jain Indraneel_1080.mp4"
+            },
+            {
+                id: 11,
+                title: "Khoobsurat",
+                artist: "Vishal Mishra, Sachin-Jigar",
+                thumbnail: "Pics/3.jpg",
+                videoUrl: "Videos/y2mate.com - Khoobsurat  Stree 2  Varun Dhawan  Shraddha Kapoor  Rajkummar Rao  SachinJigar  Vishal Mishra_1080.mp4"
+            },
+            {
+                id: 12,
+                title: "Deewani",
+                artist: "Sachet Tandon, Parampara Tandon",
+                thumbnail: "Pics/4.jpg",
+                videoUrl: "Videos/y2mate.com - Deewani  Sachet Tandon Parampara Tandon  Kumaar  Adil Shaikh  Bhushan Kumar_1080.mp4"
+            },
+            {
+                id: 13,
+                title: "Sanam Teri Kasam",
+                artist: "Harshvardhan Mawra, Ankit Tiwari, Palak M",
+                thumbnail: "Pics/5.jpg",
+                videoUrl: "Videos/y2mate.com - Sanam Teri Kasam Lyrical Video  Harshvardhan Mawra  Ankit Tiwari  Palak M  Himesh Reshammiya_1080.mp4"
+            }
+        ];
+
+        // Store videos in localStorage for access from video-player.html
+        localStorage.setItem('videos', JSON.stringify(videos));
+
+        function createVideoGrid() {
+            const container = document.getElementById('videos-grid');
+
+            videos.forEach(video => {
+                const videoElement = document.createElement('div');
+                videoElement.className = 'video-container';
+                videoElement.innerHTML = `
+                    <a href="video-player.html?videoId=${video.id}" style="text-decoration: none;">
+                        <div class="thumbnail-container">
+                            <img src="${video.thumbnail}" alt="${video.title}">
+                            <div class="play-overlay">
+                                <img src="Pics/Play.png" 
+                                     class="play-icon" alt="Play">
+                            </div>
+                        </div>
+                        <div class="video-info">
+                            <div class="video-title">${video.title}</div>
+                            <div class="video-artist">${video.artist}</div>
+                        </div>
+                    </a>
+                `;
+                container.appendChild(videoElement);
+            });
+        }
+
+        // Initialize the page
+        document.addEventListener('DOMContentLoaded', createVideoGrid);
+    </script>
+</body>
+</html>

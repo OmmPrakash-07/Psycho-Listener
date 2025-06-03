@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon"type="image/png" href="Pics\Logo2.png">
+    <link rel="stylesheet" href="HomePage.css">
+    <title>Pyscho Listener</title>
+</head>
+<body>
+    <header>
+        <div class="header">
+            <div class="logo">
+                <a href=""><img src="Pics\Main_logo.jpg" alt="Pyscho Listener" width="180px"></a>
+            </div>
+            <nav>
+                <div>
+                    <ul id="nav-bar">
+                        <li><a href="HomePage.htm">Home</a></li>
+                        <li><a href="SongPage.htm">Songs</a></li>
+                        <li><a href="videos.html">Video</a></li>
+                        <li><a href="about_us.html">About Us</a></li>
+                        <li><a href="Contact_us.html">Contact</a></li>
+                    </ul>
+                </div>
+            </nav>
+            <div class="login">
+                <img src="Pics\Logo3.png" alt="" width="70px">
+                <a href="login.html">Login</a>
+            </div>
+        </div>
+    </header>
+    <main>
+        <div class="intro-container">
+            <h1>Welcome To Pyscho Listener</h1>
+            <p>Where music and visuals collide to create an immersive experience. Our platform is built for true audio lovers, offering a seamless way to listen to music and watch videos all in one place. Whether you crave haunting melodies, electrifying beats, or deep lyrical storytelling, we bring you a world of sound like never before. Tune in, explore, and let the music take over</p>
+            <div class="search-container">
+                <input type="text" placeholder="Enter name of Songs & Videos">
+                <a href="SongPage.htm"><button><img src="Pics\Search.png" alt="" width="45px"><h3>Search</h3></button></a>
+            </div>
+        </div>
+        <div class="song-container1">
+            <div class="songs-container">
+            </div>
+            <div class="player-bar">
+                <div class="now-playing">
+                    <img src="" alt="">
+                    <div class="now-playing-info">
+                        <div class="now-playing-title"></div>
+                        <div class="now-playing-artist"></div>
+                    </div>
+                </div>
+                
+                <div class="player-controls">
+                    <button class="play-button">▶</button>
+                    <div class="progress-container">
+                        <div class="progress-bar"></div>
+                    </div>
+                    <div class="volume-container">
+                        <span>🔊</span>
+                        <input type="range" class="volume-slider" min="0" max="100" value="100">
+                    </div>
+                </div>
+                
+                <button class="close-button1">✕</button>
+            </div>
+        </div>
+        <script>
+            const songs = [
+                {
+                    title: "Shiddat",
+                    artist: "By Manan Bharadwaj",
+                    image: "Song Tumbnails/1.jpg",
+                    audio: "Songs/y2mate.com - Shiddat Title Track Full Video Sunny KaushalRadhika Madan Mohit Raina Diana P  Manan Bhardwaj.mp3"
+                },
+                {
+                    title: "Raanjhan",
+                    artist: "By Parampara Thakur",
+                    image: "Song Tumbnails/2.jpg",
+                    audio: "Songs/y2mate.com - Full Video Raanjhan  Do Patti  Kriti Sanon Shaheer Sheikh  Parampara Tandon  SachetParampara.mp3"
+                },
+                {
+                    title: "Sajni",
+                    artist: "By Arijit Singh",
+                    image: "Song Tumbnails/3.jpg",
+                    audio: "Songs/y2mate.com - Sajni Song Arijit Singh Ram Sampath  Laapataa Ladies   Aamir Khan Productions.mp3"
+                },
+                {
+                    title: "Aaj Sajeya",
+                    artist: "By Goldie Sohel",
+                    image: "Song Tumbnails/4.jpg",
+                    audio: "Songs/y2mate.com - Aaj Sajeya  Alaya F  Goldie Sohel  Punit Malhotra  Official Video SneakerSong  Dharma 20.mp3"
+                },
+                {
+                    title: "Nain Matakka",
+                    artist: "By Diljit Dosanjh and Dheekshitha Venkadeshan aka Dhee",
+                    image: "Song Tumbnails/5.jpg",
+                    audio: "Songs/y2mate.com - Nain Matakka  Baby John  Varun Dhawan Keerthy Suresh Diljit Dosanjh  Dhee Thaman S Irshad K.mp3"
+                },
+                {
+                    title: "Teri Aankhon Mein",
+                    artist: "By Darshan Raval, Manan Bhardwaj and Neha Kakkar",
+                    image: "Song Tumbnails/6.jpg",
+                    audio: "Songs/y2mate.com - Teri Aankhon Mein Song Divya K  Darshan R Neha K  Pearl V Manan B  Radhika Vinay  Bhushan K.mp3"
+                },
+                {
+                    title: "Deewani",
+                    artist: "By Sachet Tandon Parampara Tandon",
+                    image: "Song Tumbnails/7.jpg",
+                    audio: "Songs\y2mate.com - Deewani  Sachet Tandon Parampara Tandon  Kumaar  Adil Shaikh  Bhushan Kumar.mp3"
+                }
+            ];
+    
+            const audio = new Audio();
+            let currentSong = null;
+            let isPlaying = false;
+    
+            // Create song cards
+            const container = document.querySelector('.songs-container');
+            songs.forEach((song, index) => {
+                const card = document.createElement('div');
+                card.className = 'song-card';
+                card.innerHTML = `
+                    <img src="${song.image}" alt="${song.title}">
+                    <div class="song-info">
+                        <div class="song-title">${song.title}</div>
+                        <div class="song-artist">${song.artist}</div>
+                    </div>
+                `;
+                card.addEventListener('click', () => playSong(index));
+                container.appendChild(card);
+            });
+            const playerBar = document.querySelector('.player-bar');
+            const playButton = document.querySelector('.play-button');
+            const progressBar = document.querySelector('.progress-bar');
+            const progressContainer = document.querySelector('.progress-container');
+            const volumeSlider = document.querySelector('.volume-slider');
+            const closeButton1 = document.querySelector('.close-button1');
+    
+            function playSong(index) {
+                const song = songs[index];
+                currentSong = index;
+                document.querySelector('.now-playing img').src = song.image;
+                document.querySelector('.now-playing-title').textContent = song.title;
+                document.querySelector('.now-playing-artist').textContent = song.artist;
+                playerBar.classList.add('active');
+                audio.src = song.audio;
+                audio.play();
+                isPlaying = true;
+                playButton.textContent = '⏸';
+            }
+    
+            playButton.addEventListener('click', () => {
+                if (isPlaying) {
+                    audio.pause();
+                    playButton.textContent = '▶';
+                } else {
+                    audio.play();
+                    playButton.textContent = '⏸';
+                }
+                isPlaying = !isPlaying;
+            });
+    
+            closeButton1.addEventListener('click', () => {
+                playerBar.classList.remove('active');
+                audio.pause();
+                isPlaying = false;
+                playButton.textContent = '▶';
+            });
+    
+            progressContainer.addEventListener('click', (e) => {
+                const width = progressContainer.clientWidth;
+                const clickX = e.offsetX;
+                const duration = audio.duration;
+                audio.currentTime = (clickX / width) * duration;
+            });
+    
+            volumeSlider.addEventListener('input', (e) => {
+                audio.volume = e.target.value / 100;
+            });
+    
+            audio.addEventListener('timeupdate', () => {
+                const progress = (audio.currentTime / audio.duration) * 100;
+                progressBar.style.width = `${progress}%`;
+            });
+    
+            audio.addEventListener('ended', () => {
+                if (currentSong < songs.length - 1) {
+                    playSong(currentSong + 1);
+                } else {
+                    playButton.textContent = '▶';
+                    isPlaying = false;
+                }
+            });
+        </script>
+        <div class="slider-container">
+            <div class="slider">
+                <div class="slide" data-video="Videos\y2mate.com - Tainu Khabar Nahi  Arijit Singh  Munjya  Sharvari Abhay Verma SachinJigarAmitabh Bhattacharya_1080.mp4">
+                    <img src="Pics\1.jpg" alt="Tainu Khabar Nahi">
+                </div>
+                <div class="slide" data-video="Videos\y2mate.com - Tum Se Full Video Shahid Kapoor Kriti  SachinJigar Raghav Chaitanya Varun Jain Indraneel_1080.mp4">
+                    <img src="Pics\2.jpg" alt="Tum Se">
+                </div>
+                <div class="slide" data-video="Videos\y2mate.com - Khoobsurat  Stree 2  Varun Dhawan  Shraddha Kapoor  Rajkummar Rao  SachinJigar  Vishal Mishra_1080.mp4">
+                    <img src="Pics\3.jpg" alt="Khoobsurat">
+                </div>
+                <div class="slide" data-video="Videos\y2mate.com - Deewani  Sachet Tandon Parampara Tandon  Kumaar  Adil Shaikh  Bhushan Kumar_1080.mp4">
+                    <img src="Pics\4.jpg" alt="Deewani">
+                </div>
+                <div class="slide" data-video="Videos\y2mate.com - Sanam Teri Kasam Lyrical Video  Harshvardhan Mawra  Ankit Tiwari  Palak M  Himesh Reshammiya_1080.mp4">
+                    <img src="Pics\5.jpg" alt="Sanam Teri Kasam">
+                </div>
+            </div>
+            <div class="dots">
+                <span class="dot active"></span>
+                <span class="dot"></span>
+                <span class="dot"></span>
+                <span class="dot"></span>
+                <span class="dot"></span>
+            </div>
+        </div>
+        <div class="video-overlay">
+            <div class="video-container">
+                <button class="close-button">✕</button>
+                <div class="video-wrapper">
+                    <video controls>
+                        <source src="" type="video/mp4">
+                        Your browser does not support the video tag.
+                    </video>
+                </div>
+            </div>
+        </div>
+        <script>
+            document.addEventListener('DOMContentLoaded', () => {
+                const slider = document.querySelector('.slider');
+                const dots = document.querySelectorAll('.dot');
+                const videoOverlay = document.querySelector('.video-overlay');
+                const video = videoOverlay.querySelector('video');
+                const closeButton = videoOverlay.querySelector('.close-button');
+                let currentSlide = 0;
+                const totalSlides = 5;
+    
+                function updateSlider() {
+                    slider.style.transform = `translateX(-${currentSlide * 20}%)`; // 20% per slide
+                    dots.forEach((dot, index) => {
+                        dot.classList.toggle('active', index === currentSlide);
+                    });
+                }
+    
+                function nextSlide() {
+                    currentSlide = (currentSlide + 1) % totalSlides;
+                    updateSlider();
+                }
+                dots.forEach((dot, index) => {
+                    dot.addEventListener('click', () => {
+                        currentSlide = index;
+                        updateSlider();
+                    });
+                });
+                document.querySelectorAll('.slide').forEach(slide => {
+                    slide.addEventListener('click', () => {
+                        const videoUrl = slide.dataset.video;
+                        video.src = videoUrl;
+                        videoOverlay.style.display = 'flex';
+                        video.play();
+                    });
+                });
+                closeButton.addEventListener('click', () => {
+                    video.pause();
+                    video.currentTime = 0;
+                    videoOverlay.style.display = 'none';
+                });
+                setInterval(() => {
+                    if (videoOverlay.style.display !== 'flex') {
+                        nextSlide();
+                    }
+                }, 5000);
+            });
+        </script>
+    </main>
+
+</body>
+</html>

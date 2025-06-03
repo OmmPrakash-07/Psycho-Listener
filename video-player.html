@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon"type="image/png" href="Pics\Logo2.png">
+    <title>Video Stream - Now Playing</title>
+    <style>
+        :root {
+            --background: #FFFFFF;
+            --text: #ececec;
+            --muted: #c2c2c2;
+            --accent: #E6E0F0;
+            --border: #E2E2E2;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            color: var(--text);
+            background-image: url(Background.jpg);
+            background-size: contain;
+            padding: 20px;
+        }
+
+        /* Main video section */
+        .main-video-container {
+            width: 90%;
+            margin: 0 auto 40px;
+        }
+
+        .video-wrapper {
+            position: relative;
+            width: 100%;
+            padding-top: 56.25%; /* 16:9 Aspect Ratio */
+            background: black;
+            margin-bottom: 20px;
+        }
+
+        .video-wrapper video {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+
+        .video-title {
+            font-size: 1.5em;
+            font-weight: bold;
+            margin-bottom: 8px;
+        }
+
+        .video-artist {
+            color: var(--muted);
+            font-size: 1.1em;
+        }
+
+        /* Related videos grid */
+        .related-videos-title {
+            font-size: 1.3em;
+            font-weight: bold;
+            margin: 40px 0 20px;
+            padding-left: 5%;
+        }
+
+        .related-videos-grid {
+            width: 90%;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+        }
+
+        .related-video {
+            cursor: pointer;
+            transition: transform 0.3s ease;
+            background-image: url(SongBackground.jpg);
+            background-size: contain;
+        }
+
+        .related-video:hover {
+            transform: translateY(-5px);
+        }
+
+        .related-thumbnail {
+            position: relative;
+            width: 100%;
+            padding-top: 100%; /* 1:1 Aspect Ratio */
+            background: var(--accent);
+            border-radius: 8px;
+            overflow: hidden;
+            margin-bottom: 8px;
+        }
+
+        .related-thumbnail img {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .related-info {
+            padding: 8px;
+        }
+
+        .related-title {
+            font-weight: bold;
+            margin-bottom: 4px;
+            color: var(--text);
+        }
+
+        .related-artist {
+            color: var(--muted);
+            font-size: 0.9em;
+        }
+
+        .back-button {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            padding: 10px 20px;
+            background-image: url(PlayerBar.jpg);
+            background-size: cover;
+            box-shadow: 0 2px 12px rgba(255, 0, 0, 0.5);
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            text-decoration: none;
+            z-index: 1000;
+        }
+
+        @media (max-width: 768px) {
+            .related-videos-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 480px) {
+            .related-videos-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <a href="videos.html" class="back-button">← Back to Videos</a>
+
+    <div class="main-video-container">
+        <div class="video-wrapper">
+            <video id="mainVideo" controls autoplay>
+                <source src="" type="video/mp4">
+                Your browser does not support the video tag.
+            </video>
+        </div>
+        <div class="video-title" id="videoTitle"></div>
+        <div class="video-artist" id="videoArtist"></div>
+    </div>
+
+    <div class="related-videos-title">Related Videos</div>
+    <div class="related-videos-grid" id="relatedVideos">
+        <!-- Related videos will be loaded here -->
+    </div>
+
+    <script>
+        const videos = JSON.parse(localStorage.getItem('videos'));
+        let currentVideoId;
+
+        function loadVideo(videoId) {
+            const video = videos.find(v => v.id === videoId);
+            if (!video) return;
+
+            currentVideoId = videoId;
+            
+            // Update main video
+            document.getElementById('mainVideo').src = video.videoUrl;
+            document.getElementById('videoTitle').textContent = video.title;
+            document.getElementById('videoArtist').textContent = video.artist;
+
+            // Load related videos (excluding current video)
+            loadRelatedVideos(videoId);
+        }
+
+        function loadRelatedVideos(currentId) {
+            const container = document.getElementById('relatedVideos');
+            container.innerHTML = '';
+
+            const relatedVideos = videos.filter(video => video.id !== currentId);
+
+            relatedVideos.forEach(video => {
+                const element = document.createElement('div');
+                element.className = 'related-video';
+                element.innerHTML = `
+                    <div class="related-thumbnail">
+                        <img src="${video.thumbnail}" alt="${video.title}">
+                    </div>
+                    <div class="related-info">
+                        <div class="related-title">${video.title}</div>
+                        <div class="related-artist">${video.artist}</div>
+                    </div>
+                `;
+                element.addEventListener('click', () => {
+                    loadVideo(video.id);
+                    window.scrollTo(0, 0);
+                });
+                container.appendChild(element);
+            });
+        }
+
+        // Initialize page
+        document.addEventListener('DOMContentLoaded', () => {
+            const urlParams = new URLSearchParams(window.location.search);
+            const videoId = parseInt(urlParams.get('videoId')) || 1;
+            loadVideo(videoId);
+        });
+    </script>
+</body>
+</html>
